@@ -1,0 +1,46 @@
+#직무별 salary 분포 (커미션 반영 급여)
+select d.department_id, d.department_name, format(round(avg(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(max(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(min(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), count(*)
+from employees e join departments d on e.department_id = d.department_id
+group by d.department_id
+order by d.department_id
+;
+
+#시기별 연봉
+select case when year(curdate())-year(hire_date) <= 5 then '~5년'
+			  when year(curdate())-year(hire_date) <= 10 then '6~10년'
+              else '11년 이상'
+        end sal_grade, format(round(avg(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(max(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(min(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), count(*)
+from employees e 
+group by sal_grade
+order by ( case sal_grade when '11년 이상' then 1
+                        when '6~10년' then 2
+                        else 3
+					end)
+;
+
+#시티별 연봉 - location_id 순
+select l.location_id, l.city, format(round(avg(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(max(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(min(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), count(*)
+from employees e join departments d on e.department_id = d.department_id
+	join locations l on d.location_id = l.location_id
+group by l.location_id
+order by l.location_id
+;
+
+#나라별 연봉 - 
+select c.country_id, c.country_name, format(round(avg(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(max(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(min(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), count(*)
+from employees e join departments d on e.department_id = d.department_id
+	join locations l on d.location_id = l.location_id
+    join countries c on l.country_id = c.country_id
+group by c.country_id
+order by c.country_id
+;
+
+#대륙별 연봉
+select r.region_id, r.region_name, format(round(avg(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(max(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(min(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), count(*)
+from employees e join departments d on e.department_id = d.department_id
+	join locations l on d.location_id = l.location_id
+    join countries c on l.country_id = c.country_id
+    join regions r on c.region_id = r.region_id
+group by r.region_id
+order by r.region_id
+;
