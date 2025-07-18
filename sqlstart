@@ -44,3 +44,11 @@ from employees e join departments d on e.department_id = d.department_id
 group by r.region_id
 order by r.region_id
 ;
+
+
+#직무별 
+select j.job_id, j.job_title, format(round(avg(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(max(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), format(round(min(e.salary * (1 + coalesce(e.commission_pct, 0)) * 12 * 1390),-3),0), count(*)
+from employees e join jobs j on e.job_id = j.job_id
+group by j.job_id
+order by j.job_id
+;
