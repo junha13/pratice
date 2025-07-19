@@ -1,11 +1,11 @@
 package project;
 
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class MenuController {
 	static Scanner scan;
 	static Db_method db;
-	static int number;
 	
 	static public void setContext() throws Exception {
 	scan = new Scanner(System.in);
@@ -25,21 +25,23 @@ public class MenuController {
 			System.out.println("8. 나라이름으로 직원정보 검색하기");
 			System.out.println("0. 프로그램 종료하기");
 			System.out.println("선택 >>");
+			String num = scan.nextLine();
+			int number= 0;
+			
 			
 			//String  //그럼 스트링으로 받고 예외처리 해야 할까 
 			// 너무 많은 고민이 있었지만 ~~스토리만들기
 			// 문자열이면 
 			try {
-			    int number = scan.nextInt();
+			    number = Integer.parseInt(num);
 			    if (number < 0 || number > 8) {
 			        throw new SelectNumberException();
 			    }
-			//} catch (InputMismatchException e) {
-			//    System.out.println(new SelectInputException().getMessage());
-			//    break;
+			} catch (NumberFormatException e) {
+			    System.out.println(new SelectInputException().getMessage());
+			    run();
 			} catch (SelectNumberException e) {
 			    System.out.println(e.getMessage());
-			    break;
 			}
 			switch (number) {
 				case 1 -> { 
